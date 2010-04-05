@@ -35,8 +35,8 @@ module Yammr
       @access_token = @request_token.get_access_token(:oauth_verifier => auth_code)
     end
 
-    def get_messages()
-
+    def fetch_messages()
+      YammerAPI::Message.fetch_latest(@access_token)
     end
   end
   

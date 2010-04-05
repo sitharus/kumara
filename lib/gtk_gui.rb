@@ -1,6 +1,7 @@
 require 'gtk2'
 require 'gconf2'
 require File.dirname(File.expand_path(__FILE__)) + '/oauth_config'
+require File.dirname(File.expand_path(__FILE__)) + '/yammer_api'
 
 module Yammr
   class GtkGui
@@ -34,6 +35,8 @@ module Yammr
       add_message_list
       @main_window.add(@main_vbox)
       @main_window.show_all
+
+      fetch_messages
     end
 
     def add_menu_bar
@@ -125,6 +128,10 @@ module Yammr
         retry
       end
       verification_window.destroy
+    end
+
+    def fetch_messages
+      puts @client.fetch_messages()
     end
 
   end
