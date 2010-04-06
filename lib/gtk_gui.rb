@@ -3,18 +3,18 @@ require 'gconf2'
 require File.dirname(File.expand_path(__FILE__)) + '/oauth_config'
 require File.dirname(File.expand_path(__FILE__)) + '/yammer_api'
 
-module Yammr
+module Kumara
   class GtkGui
     
     def initialize
-      @client = Client.new(Yammr::OauthConfig::APP_KEY, Yammr::OauthConfig::APP_SECRET)
+      @client = YammerAPI::Client.new(Yammr::OauthConfig::APP_KEY, Yammr::OauthConfig::APP_SECRET)
       @gconf_client = GConf::Client.default
     end
     
     def start
       @main_window = Gtk::Window.new
       @main_window.set_default_size(200, 600)
-      @main_window.title = "Yammr"
+      @main_window.title = "Kumara"
       @main_window.signal_connect("destroy") do
         Gtk.main_quit
       end

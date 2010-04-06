@@ -1,8 +1,7 @@
 require 'rubygems'
 require 'oauth'
 
-module Yammr
-
+module YammerAPI
   class Client
     def initialize(app_key, app_secret)
       @consumer = OAuth::Consumer.new(app_key, app_secret,
@@ -36,7 +35,7 @@ module Yammr
     end
 
     def fetch_messages()
-      YammerAPI::Message.fetch_latest(@access_token)
+      Message.fetch_latest(@access_token)
     end
   end
   
