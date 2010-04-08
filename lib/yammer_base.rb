@@ -1,4 +1,5 @@
 require 'uri'
+require 'nokogiri'
 
 module YammerAPI
   class Base
@@ -30,6 +31,40 @@ module YammerAPI
         url = url_for(components, parameters)
         access_token.get(url)
       end
+
+      def id_field(sym)
+        self.class_eval do
+          attr_reader(sym)
+          @@id_symbol = sym
+          def set_id_field(val)
+            instance_variable_set(:"@#{@@id_symbol}", val)
+          end
+        end
+      end
+    end
+
+    def initialize(fragment = nil, settings = {})
+      if not fragment.nil?
+        fragment.children.each do |child|
+          next if child.text?
+          var_name = child.node_name.gsub(/[^a-zA-Z0-9_]/, '_')
+          if self.respond_to? :"load_#{var_name}"
+            self.send(:"load_#{var_name}", child)
+          else
+            puts "no load_"+var_name
+            if var_name == 'id'
+              set_id_field(child.content)
+            else
+              instance_variable_set(('@'+var_name).to_sym, child.content)
+            end
+          end
+        end
+      end
+      
+      settings.each do |k,v|
+        instance_variable_set(('@'+k).to_sym, v)
+      end
+
     end
   end
 end

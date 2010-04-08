@@ -3,6 +3,6 @@ Copyright 2010 Phillip Hutchings, licensed under the terms of the
 GNU GPL v2, please see LICENSE
 
 
-Requires: ruby-gnome2, ruby-gconf2, net/https
+Requires: ruby-gnome2, ruby-gconf2, net/https, nokogiri
 
 Run kumara.rb, everything else is in the GUI
