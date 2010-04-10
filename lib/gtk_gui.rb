@@ -2,7 +2,7 @@ require 'gtk2'
 require 'gconf2'
 require File.dirname(File.expand_path(__FILE__)) + '/oauth_config'
 require File.dirname(File.expand_path(__FILE__)) + '/yammer_api'
-require File.dirname(File.expand_path(__FILE__)) + '/gtk_message_cell'
+require File.dirname(File.expand_path(__FILE__)) + '/gtk_message_view'
 
 module Kumara
   class GtkGui
@@ -38,7 +38,7 @@ module Kumara
       @main_window.show_all
 
       fetch_messages
-      @message_view.show_all
+      @message_vbox.show_all
     end
 
     def add_menu_bar
@@ -66,8 +66,14 @@ module Kumara
     end
 
     def add_message_list
+      message_window = Gtk::ScrolledWindow.new
+      message_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS)
 
-
+      @main_vbox.pack_start(message_window)
+      @message_vbox = Gtk::VBox.new
+      message_window.add_with_viewport(@message_vbox)
+      message_window.shadow_type = Gtk::SHADOW_NONE
+      message_window.show_all
     end
 
     # Add a single button to the window to go to oauth login
@@ -126,7 +132,12 @@ module Kumara
     end
 
     def fetch_messages
-      @client.fetch_messages.each do |message|
+      # @client.fetch_messages.each do |message|
+      #  MessageView.new(@message_vbox, message)
+      # end
+
+      1.upto(20) do
+        MessageView.new(@message_vbox, YammerAPI::Message.new)
       end
     end
 

@@ -22,11 +22,19 @@ module YammerAPI
 
     def initialize(document = nil, settings = {})
       super(document, settings)
+
+      if document.nil?
+        @plain_body = "A test message A test message A test message A test message A test message A test message A test message A test message A test message "
+      end
     end
 
     def load_body(body_fragment)
       @parsed_body = body_fragment.xpath('parsed').first.content
       @plain_body = body_fragment.xpath('plain').first.content
+    end
+
+    def username
+      "A User"
     end
 
   end
