@@ -22,7 +22,8 @@ module Kumara
     end
 
     def username_label
-      label = Gtk::Label.new(@message.username)
+      label = Gtk::Label.new
+      label.markup = "<span weight='bold'>#{@message.username}</span>"
       label.set_alignment(0,0)
       label
     end
