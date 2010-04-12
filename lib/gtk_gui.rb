@@ -71,8 +71,12 @@ module Kumara
 
       @main_vbox.pack_start(message_window)
       @message_vbox = Gtk::VBox.new
-      message_window.add_with_viewport(@message_vbox)
+
+      vp = Gtk::Viewport.new(message_window.hadjustment, message_window.vadjustment)
+      vp.add(@message_vbox)
+      message_window.add(vp)
       message_window.shadow_type = Gtk::SHADOW_NONE
+      vp.shadow_type = Gtk::SHADOW_NONE
       message_window.show_all
     end
 
