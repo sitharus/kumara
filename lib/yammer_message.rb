@@ -7,10 +7,19 @@ module YammerAPI
 
       def fetch_latest(access_token)
         doc = Nokogiri::XML(fetch(access_token, 'messages').body)
+
+        doc.xpath("response/references/reference").each do |r|
+          case r.xpath("type").first.content
+          when 'user'
+            User.add(User.new(r))
+          end
+        end
+
         messages = []
         doc.xpath("response/messages/message").each do |m|
           messages << Message.new(m)
         end
+
         messages
       end
     end
@@ -23,9 +32,7 @@ module YammerAPI
     def initialize(document = nil, settings = {})
       super(document, settings)
 
-      if document.nil?
-        @plain_body = "A test message A test message A test message A test message A test message A test message A test message A test message A test message "
-      end
+      @user = User[@sender_id]
     end
 
     def load_body(body_fragment)
@@ -34,7 +41,7 @@ module YammerAPI
     end
 
     def username
-      "A User"
+      @user.full_name
     end
 
   end

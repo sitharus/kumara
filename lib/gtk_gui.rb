@@ -136,13 +136,13 @@ module Kumara
     end
 
     def fetch_messages
-      # @client.fetch_messages.each do |message|
-      #  MessageView.new(@message_vbox, message)
-      # end
-
-      1.upto(20) do
-        MessageView.new(@message_vbox, YammerAPI::Message.new)
+      @client.fetch_messages.each do |message|
+       MessageView.new(@message_vbox, message)
       end
+
+      # 1.upto(20) do
+      #   MessageView.new(@message_vbox, YammerAPI::Message.new)
+      # end
     end
 
   end
