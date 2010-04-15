@@ -4,7 +4,7 @@ module Kumara
       CACHE_DIR = File.expand_path('~/.kumara_cache')
 
       def sanitise(key)
-        key.gsub(/\.\./, '')
+        key.gsub(/\.\./, '_').gsub(/[\/\\]/, '_')
       end
 
       def file_name(key)
@@ -12,21 +12,22 @@ module Kumara
       end
 
       def add(image, key)
-        if not File.exists(CACHE_DIR)
-          File.mkdir(CACHE_DIR)
+        if not File.exists?(CACHE_DIR)
+          Dir.mkdir(CACHE_DIR)
         end
 
-        File.open(file_name(key)) do |f|
+        File.open(file_name(key), "w") do |f|
           f << image
         end
       end
 
       def fetch(key)
-        if File.exists(file_name(key))
+        if File.exists?(file_name(key))
           File.open(file_name(key)) do |f|
             return f.read
           end
         end
+        nil
       end
 
       def [](key)

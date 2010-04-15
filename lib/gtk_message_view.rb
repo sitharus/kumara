@@ -1,6 +1,11 @@
+require 'open-uri'
+
 module Kumara
   class MessageView
     def initialize(parent, message)
+      @@default_user_image ||= Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, 1, 8, 48, 48)
+
+
       @message = message
       @parent = parent
       create_view
@@ -9,10 +14,30 @@ module Kumara
 
     def create_view
       @main_view = Gtk::VBox.new(false, 5)
-      pic_and_message_view = Gtk::HBox.new
+      pic_and_message_view = Gtk::HBox.new(false, 10)
       # TODO: pic
+      pic_view = Gtk::Image.new(@@default_user_image)
+      pic_view.set_alignment(0.5, 0)
+      pic_and_message_view.pack_start(pic_view, false, false)
       
-
+      if @message.user.mugshot_url
+        url = @message.user.mugshot_url
+        key = @message.user.user_id
+        if Kumara::ImageCache[key]
+          set_image(pic_view, key)
+        else
+          Thread.new do
+            open(url) { |u|
+              puts 'Got image'
+              Kumara::ImageCache[key] = u.read
+              Gtk.queue do
+                set_image(pic_view, key)
+              end
+            }
+          end
+        end
+      end
+      
       message_view = Gtk::VBox.new(false, 5)
       message_view.pack_start(username_label)
       message_view.pack_start(message)
@@ -45,5 +70,11 @@ module Kumara
       info_view.set_alignment(0,0)
       info_view
     end
+
+    def set_image(pic_view, key)
+      image = Gdk::Pixbuf.new(Kumara::ImageCache.file_name(key), 48, 48)
+      pic_view.pixbuf = image
+    end
+
   end
 end

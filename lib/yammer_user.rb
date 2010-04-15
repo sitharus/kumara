@@ -17,7 +17,6 @@ module YammerAPI
     attr_reader :following_count, :follower_count, :update_count
 
     def load_stats(stats)
-      puts stats
       @following_count = stats.xpath('following').first.content.to_i
       @follower_count = stats.xpath('followers').first.content.to_i
       @update_count = stats.xpath('updates').first.content.to_i

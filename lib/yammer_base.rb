@@ -51,7 +51,7 @@ module YammerAPI
           if self.respond_to? :"load_#{var_name}"
             self.send(:"load_#{var_name}", child)
           else
-            puts "no load_"+var_name
+            # puts "no load_"+var_name
             if var_name == 'id'
               set_id_field(child.content)
             else

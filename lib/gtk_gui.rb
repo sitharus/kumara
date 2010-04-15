@@ -3,6 +3,7 @@ require 'gconf2'
 require File.dirname(File.expand_path(__FILE__)) + '/gtkqueue'
 require File.dirname(File.expand_path(__FILE__)) + '/oauth_config'
 require File.dirname(File.expand_path(__FILE__)) + '/yammer_api'
+require File.dirname(File.expand_path(__FILE__)) + '/image_cache'
 require File.dirname(File.expand_path(__FILE__)) + '/gtk_message_view'
 
 
