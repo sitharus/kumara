@@ -11,6 +11,8 @@ module Kumara
       @main_view = Gtk::VBox.new(false, 5)
       pic_and_message_view = Gtk::HBox.new
       # TODO: pic
+      
+
       message_view = Gtk::VBox.new(false, 5)
       message_view.pack_start(username_label)
       message_view.pack_start(message)

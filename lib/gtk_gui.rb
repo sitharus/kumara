@@ -1,15 +1,19 @@
 require 'gtk2'
 require 'gconf2'
+require File.dirname(File.expand_path(__FILE__)) + '/gtkqueue'
 require File.dirname(File.expand_path(__FILE__)) + '/oauth_config'
 require File.dirname(File.expand_path(__FILE__)) + '/yammer_api'
 require File.dirname(File.expand_path(__FILE__)) + '/gtk_message_view'
 
+
+
 module Kumara
   class GtkGui
-    
+
     def initialize
       @client = YammerAPI::Client.new(Yammr::OauthConfig::APP_KEY, Yammr::OauthConfig::APP_SECRET)
       @gconf_client = GConf::Client.default
+      
     end
     
     def start
@@ -27,7 +31,7 @@ module Kumara
       else
         oauth_prompt
       end
-      Gtk.main
+      Gtk.main_with_queue 200
     end
 
     def setup_main_window
@@ -136,13 +140,15 @@ module Kumara
     end
 
     def fetch_messages
-      @client.fetch_messages.each do |message|
-       MessageView.new(@message_vbox, message)
+      Thread.new do
+        messages = @client.fetch_messages.sort { |a,b| a.created_at <=> b.created_at }
+        Gtk.queue do
+          messages.each do |message|
+            MessageView.new(@message_vbox, message)
+          end
+          @message_vbox.show_all
+        end
       end
-
-      # 1.upto(20) do
-      #   MessageView.new(@message_vbox, YammerAPI::Message.new)
-      # end
     end
 
   end

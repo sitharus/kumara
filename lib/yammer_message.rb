@@ -29,6 +29,8 @@ module YammerAPI
     attr_reader :parsed_body, :plain_body, :system_message, :sender_id, :replied_to_id
     attr_reader :client_type, :sender_type, :group_id
 
+    attr_reader :user
+
     def initialize(document = nil, settings = {})
       super(document, settings)
 
