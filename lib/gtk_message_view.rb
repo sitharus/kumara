@@ -13,8 +13,10 @@ module Kumara
     end
 
     def create_view
-      @main_view = Gtk::VBox.new(false, 5)
+      @main_view = Gtk::VBox.new
       pic_and_message_view = Gtk::HBox.new(false, 10)
+      pic_and_message_view.border_width = 5
+
       # TODO: pic
       pic_view = Gtk::Image.new(@@default_user_image)
       pic_view.set_alignment(0.5, 0)
@@ -72,9 +74,12 @@ module Kumara
     end
 
     def set_image(pic_view, key)
-      image = Gdk::Pixbuf.new(Kumara::ImageCache.file_name(key), 48, 48)
-      pic_view.pixbuf = image
+      begin
+        image = Gdk::Pixbuf.new(Kumara::ImageCache.file_name(key), 48, 48)
+        pic_view.pixbuf = image
+      rescue => e
+        puts "Unknown image file format for user image #{key}"
+      end
     end
-
   end
 end
