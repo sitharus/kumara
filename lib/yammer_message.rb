@@ -11,7 +11,11 @@ module YammerAPI
         doc.xpath("response/references/reference").each do |r|
           case r.xpath("type").first.content
           when 'user'
+            puts 'user'
             User.add(User.new(r))
+          when 'group'
+            puts 'group'
+            Group.add(Group.new(r))
           end
         end
 
@@ -41,9 +45,17 @@ module YammerAPI
       @parsed_body = body_fragment.xpath('parsed').first.content
       @plain_body = body_fragment.xpath('plain').first.content
     end
+    
+    def load_created_at(f)
+      @created_at = DateTime.parse(f.content)
+    end
 
     def username
       @user.full_name
+    end
+
+    def group
+      @group_id and Group[@group_id]
     end
 
   end

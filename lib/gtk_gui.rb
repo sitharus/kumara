@@ -142,12 +142,16 @@ module Kumara
 
     def fetch_messages
       Thread.new do
-        messages = @client.fetch_messages.sort { |a,b| a.created_at <=> b.created_at }
-        Gtk.queue do
-          messages.each do |message|
-            MessageView.new(@message_vbox, message)
+        begin
+          messages = @client.fetch_messages.sort { |a,b| a.created_at <=> b.created_at }
+          Gtk.queue do
+            messages.each do |message|
+              MessageView.new(@message_vbox, message)
+            end
+            @message_vbox.show_all
           end
-          @message_vbox.show_all
+        rescue => e
+          puts "#{e}\n#{e.backtrace.join("\n")}"
         end
       end
     end

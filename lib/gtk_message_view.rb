@@ -52,8 +52,10 @@ module Kumara
     end
 
     def username_label
+      t = "<span weight='bold'>#{@message.username}</span>"
+      t += " in #{@message.group.full_name}" if @message.group
       label = Gtk::Label.new
-      label.markup = "<span weight='bold'>#{@message.username}</span>"
+      label.markup = t
       label.set_alignment(0,0)
       label
     end
@@ -68,7 +70,7 @@ module Kumara
 
     def info_view
       info_view = Gtk::Label.new
-      info_view.markup = "<small>Posted $time ago</small>"
+      info_view.markup = "<small>Posted #{@message.created_at.strftime('%Y/%m/%d %H:%M')}</small>"
       info_view.set_alignment(0,0)
       info_view
     end

@@ -33,13 +33,8 @@ module YammerAPI
       end
 
       def id_field(sym)
-        self.class_eval do
-          attr_reader(sym)
-          @@id_symbol = sym
-          def set_id_field(val)
-            instance_variable_set(:"@#{@@id_symbol}", val)
-          end
-        end
+        self.class_eval "def set_id_field(val) instance_variable_set(:@#{sym}, val) end"
+        self.class_eval do attr_reader(sym) end
       end
     end
 

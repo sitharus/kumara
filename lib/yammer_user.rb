@@ -1,6 +1,5 @@
 module YammerAPI
   class User < Base
-    
     class << self
       def add(user)
         @users ||= {}
